@@ -1,0 +1,9 @@
+{
+  "name": "com.ben_turner.explosive_transistor",
+  "description": "Home Automation",
+  "path": "C:\\Users\\ben\\Documents\\Go\\src\\github.com\\ben-turner\\explosive-transistor2\\explosive-transistor2.exe",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://jndgpmikgdaioihcidbadpkddhobjnbf/"
+  ]
+}
