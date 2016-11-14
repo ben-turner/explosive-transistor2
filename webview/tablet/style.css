@@ -1,0 +1,56 @@
+body {
+	background-color: #208af9;
+	font-family: 'Work Sans', sans-serif;
+	color: #ffffff;
+}
+
+#now_playing {
+	position: absolute;
+	left: 30px;
+	top: 30px;
+	font-size: 30px;
+	font-family: arial, sans-serif;
+}
+
+#now_playing > span {
+	font-family: 'Work Sans', sans-serif;
+}
+
+#error_text {
+	color: red;
+	width: 100%;
+	text-align: center;
+	font-weight: bold;
+	font-size: 20px;
+}
+
+#date_time {
+	position: absolute;
+	right: 30px;
+	top: 30px;
+	text-align: right;
+}
+
+#day_weather {
+	font-size: 30px;
+}
+
+#day_weather>span {
+	font-family: 'Work Sans', sans-serif;
+	padding-left: 15px
+}
+
+#time {
+	font-size: 40px;
+}
+
+#buttons {
+	position: absolute;
+	top: 125px;
+	padding: 25px;
+}
+
+#buttons>button{
+	height: 100px;
+	width: 100px;
+}

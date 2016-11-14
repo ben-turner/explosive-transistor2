@@ -1,0 +1,120 @@
+<html>
+<head>
+	<title>Explosive Transistor Tablet View</title>
+	<link href="https://fonts.googleapis.com/css?family=Work+Sans:200" rel="stylesheet">
+	<link href="/lib/weather-icons/weather-icons.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<div id="now_playing">♫ <span id="song_title">Jai Wolf - Drive</span></div>
+<div id="error_text"></div>
+<div id="date_time">
+	<li id="day_weather" class="wi wi-refresh"><span id="day">Loading</span></li><br>
+	<span id="time">21:10</span>
+</div>
+<div id="buttons">
+	<button id="toggle_lights" onclick="toggleLight(1); toggleLight(2);">Toggle Lights</button>
+</div>
+<script type="text/javascript">
+function setLight(on, light) {
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState === 4) {
+			if (xmlhttp.status !== 200) {
+				document.getElementById("error_text").innerText = "Failed to set light: " + xmlhttp.status;
+			}
+		}
+	};
+	xmlhttp.open("POST", "http://192.168.1.253:8080/api/huebridge/"+light);
+	xmlhttp.send('{"on":'+on+', "bri": 255}')
+}
+
+function toggleLight(id) {
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState === 4) {
+			if (xmlhttp.status === 200) {
+				console.log(xmlhttp.responseText)
+				var state = JSON.parse(xmlhttp.responseText);
+				setLight(!state.On, id)
+			}
+		}
+	};
+	xmlhttp.open("GET", "http://192.168.1.253:8080/api/huebridge/"+id);
+	xmlhttp.send()
+}
+
+var weatherURL = "http://api.openweathermap.org/data/2.5/weather?zip=v9b%201y3,ca&APPID=c098f0c349cd55cd587e94971edf2482"
+function setDateTime() {
+	var d = new Date();
+	document.getElementById("time").innerText = d.getHours() + (d.getMinutes() < 10 ? ":0" : ":") + d.getMinutes();
+	var day = document.getElementById("day");
+	switch (d.getDay()) {
+		case 0:
+			day.innerText = "Sunday";
+			break;
+		case 1:
+			day.innerText = "Monday";
+			break;
+		case 2:
+			day.innerText = "Tuesday";
+			break;
+		case 3:
+			day.innerText = "Wednesday";
+			break;
+		case 4:
+			day.innerText = "Thurday";
+			break;
+		case 5:
+			day.innerText = "Friday";
+			break;
+		case 6:
+			day.innerText = "Saturday";
+			break;
+		case 7:
+			day.innerText = "Sunday";
+			break;
+	}
+}
+function setWeather() {
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState === 4) {
+			if (xmlhttp.status === 200) {
+				var weather = JSON.parse(xmlhttp.responseText)
+				document.getElementById("day_weather").className = "wi wi-owm-" + weather.weather[0].id;
+			} else {
+			 	document.getElementById("error_text").innerText = "Failed to load weather: " + xmlhttp.status;
+			}
+		}
+	};
+	xmlhttp.open("GET", weatherURL);
+	xmlhttp.send()
+}
+
+function setSong() {
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState === 4) {
+			if (xmlhttp.status === 200) {
+				document.getElementById("song_title").innerText = xmlhttp.responseText;
+			} else {
+			 	document.getElementById("error_text").innerText = "Failed to load song: " + xmlhttp.status;
+			}
+		}
+	};
+	xmlhttp.open("GET", "http://192.168.1.253:8080/cur_song/");
+	xmlhttp.send()
+}
+
+function loop() {
+	setDateTime();
+	setWeather();
+	setSong();
+}
+
+loop();
+setInterval(loop, 5000);
+</script>
+</body>
+</html>

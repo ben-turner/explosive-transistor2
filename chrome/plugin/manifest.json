@@ -1,0 +1,17 @@
+{
+	"manifest_version": 2,
+	"name": "Explosive Transistor",
+	"version": "1.0",
+	"description": "Sends browser data to server for future use.",
+	"content_scripts": 
+	[
+		{
+			"matches": ["*://play.google.com/music/*"],
+			"js": ["content_script.js"],
+			"run_at": "document_end"
+		}
+	],
+	"background": {
+		"scripts": ["background.js"]
+	}
+}
