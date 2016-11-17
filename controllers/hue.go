@@ -25,14 +25,13 @@ var (
 )
 
 type HueConfig struct {
-	BridgeIp  string         `yaml:"bridgeIp"`
-	Key       string         `yaml:"key"`
-	Groupings []*DeviceGroup `yaml:"groupings"`
+	BridgeIp string `yaml:"bridgeIp"`
+	Key      string `yaml:"key"`
 }
 
 type hue struct {
 	*HueConfig
-	groupings []*DeviceGroup
+	groups []*DeviceGroup
 }
 
 func NewHue(c *HueConfig, g []*DeviceGroup) Controller {
@@ -98,7 +97,8 @@ func (d *hue) set(dev DeviceId, s *State) error {
 }
 
 func (d *hue) Set(g GroupId, s *State) error {
-	for _, dev := range d.Groupings[g].Devices {
+	for _, dev := range d.groups[g].Devices {
+		log.Println("Setting", dev, s.On)
 		if err := d.set(dev, s); err != nil {
 			return err
 		}
@@ -136,7 +136,8 @@ func (d *hue) get(light string) (*State, error) {
 }
 
 func (d *hue) Get(group GroupId) (*State, error) {
-	return d.get(string(d.Groupings[group].Devices[0]))
+	groupVal := d.groups[group]
+	return d.get(string(groupVal.Devices[0]))
 }
 
 func (d *hue) List() (map[GroupId]string, error) {

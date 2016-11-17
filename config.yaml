@@ -3,9 +3,9 @@ controllers:
     hue:
       bridgeIp: "192.168.1.64"
       key: "d-WZEUsdN0IBn69yO1BoFf7UWBr4WDBZcaEM7Cec"
-    groupings:
+    groups:
     - name: Bedroom Ceiling
-      lights: [1, 2]
+      devices: [1, 2]
 serverHost: ":8080"
 tlsConfig:
   privateKey: C:\Users\ben\Documents\ET_KEYS\key.pem

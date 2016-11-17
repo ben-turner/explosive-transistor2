@@ -52,7 +52,7 @@ func Run() int {
 
 	devs := make(map[string]controllers.Controller)
 	for n, d := range c.Controllers {
-		devs[n] = controllers.NewHue(d.Hue, d.Groupings)
+		devs[n] = controllers.NewHue(d.Hue, d.Groups)
 	}
 
 	http.HandleFunc("/cur_song/", getSong)

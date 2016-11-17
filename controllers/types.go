@@ -6,12 +6,12 @@ type DeviceId string
 type ControllerConfig struct {
 	Hue *HueConfig `yaml:"hue"`
 
-	Groupings []*DeviceGroup `yaml:"groupings"`
+	Groups []*DeviceGroup `yaml:"groups"`
 }
 
 type DeviceGroup struct {
-	Devices []DeviceId
-	Name    string
+	Devices []DeviceId `yaml:"devices"`
+	Name    string     `yaml:"name"`
 }
 
 type Controller interface {
