@@ -13,6 +13,7 @@ import (
 
 func wrapGetFunc(dev controllers.Controller) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Access-Control-Allow-Origin", "*")
 		vars := mux.Vars(r)
 		d, ok := vars["deviceId"]
 		if !ok {
@@ -25,6 +26,7 @@ func wrapGetFunc(dev controllers.Controller) func(w http.ResponseWriter, r *http
 			fmt.Fprint(w, err.Error())
 			return
 		}
+
 		state, err := dev.Get(controllers.GroupId(groupIndex))
 		if err != nil {
 			fmt.Fprint(w, err.Error())
@@ -42,7 +44,7 @@ func wrapGetFunc(dev controllers.Controller) func(w http.ResponseWriter, r *http
 
 func wrapSetFunc(dev controllers.Controller) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println("Set wrapper called")
+		w.Header().Add("Access-Control-Allow-Origin", "*")
 		vars := mux.Vars(r)
 		d, ok := vars["deviceId"]
 		if !ok {
