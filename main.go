@@ -55,6 +55,8 @@ func Run() int {
 		devs[n] = controllers.NewHue(d.Hue, d.Groups)
 	}
 
+	AddWatches(devs)
+
 	http.HandleFunc("/cur_song/", getSong)
 	http.HandleFunc("/set_song/", setSong)
 	http.HandleFunc("/log/", writeLog)

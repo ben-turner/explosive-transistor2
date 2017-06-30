@@ -6,6 +6,9 @@ controllers:
     groups:
     - name: Bedroom Ceiling
       devices: [1, 2]
+  computer:
+    computer:
+      
 serverHost: ":8080"
 tlsConfig:
   privateKey: C:\Users\ben\Documents\ET_KEYS\key.pem

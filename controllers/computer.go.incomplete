@@ -19,29 +19,24 @@ const (
 	Delete requestMethod = "DELETE"
 )
 
-var (
-	BadHueResponseError error = errors.New("Bad response body from Hue")
-	GetBodyNotNilError  error = errors.New("Get request body must be blank")
-)
-
-type HueConfig struct {
+type ComputerConfig struct {
 	BridgeIp string `yaml:"bridgeIp"`
 	Key      string `yaml:"key"`
 }
 
-type hue struct {
-	*HueConfig
+type computer struct {
+	*ComputerConfig
 	groups []*DeviceGroup
 }
 
-func NewHue(c *HueConfig, g []*DeviceGroup) Controller {
-	return &hue{
+func NewComputer(c *computerConfig, g []*DeviceGroup) Controller {
+	return &computer{
 		c,
 		g,
 	}
 }
 
-func (d *hue) sendRequest(m requestMethod, path string, body []byte) ([]byte, error) {
+func (d *computer) sendRequest(m requestMethod, path string, body []byte) ([]byte, error) {
 	if m == Get && body != nil {
 		return nil, GetBodyNotNilError
 	}
@@ -58,7 +53,7 @@ func (d *hue) sendRequest(m requestMethod, path string, body []byte) ([]byte, er
 	return ioutil.ReadAll(response.Body)
 }
 
-func (d *hue) set(dev DeviceId, s *State) error {
+func (d *computer) set(dev DeviceId, s *State) error {
 	log.Println("Setting")
 	path := fmt.Sprintf("lights/%v/state", string(dev))
 
@@ -91,12 +86,12 @@ func (d *hue) set(dev DeviceId, s *State) error {
 		return errors.New(resParsed[0].Error.Description)
 	}
 	if resParsed[0].Success == nil {
-		return BadHueResponseError
+		return BadcomputerResponseError
 	}
 	return nil
 }
 
-func (d *hue) Set(g GroupId, s *State) error {
+func (d *computer) Set(g GroupId, s *State) error {
 	for _, dev := range d.groups[g-1].Devices {
 		if err := d.set(dev, s); err != nil {
 			return err
@@ -105,7 +100,7 @@ func (d *hue) Set(g GroupId, s *State) error {
 	return nil
 }
 
-func (d *hue) get(light string) (*State, error) {
+func (d *computer) get(light string) (*State, error) {
 	path := "lights/" + light + "/"
 	res, err := d.sendRequest(Get, path, nil)
 	if err != nil {
@@ -134,12 +129,12 @@ func (d *hue) get(light string) (*State, error) {
 	}, nil
 }
 
-func (d *hue) Get(group GroupId) (*State, error) {
+func (d *computer) Get(group GroupId) (*State, error) {
 	groupVal := d.groups[group-1]
 	return d.get(string(groupVal.Devices[0]))
 }
 
-func (d *hue) List() (map[GroupId]string, error) {
+func (d *computer) List() (map[GroupId]string, error) {
 	return nil, errors.New("Not implemented")
 	// path := "lights"
 	// res, err := d.sendRequest(Get, path, nil)
